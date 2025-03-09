@@ -176,8 +176,7 @@ async function app() {
   // Gui content will change depending on which model is in the query string.
   const urlParams = new URLSearchParams(window.location.search);
   if (!urlParams.has('model')) {
-    alert('Cannot find model in the query string.');
-    return;
+    urlParams.set('model', 'movenet');
   }
   await setupDatGui(urlParams);
 
