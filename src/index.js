@@ -33,12 +33,9 @@ import {RendererWebGPU} from './renderer_webgpu';
 import {RendererCanvas2d} from './renderer_canvas2d';
 import {setupDatGui} from './option_panel';
 import {STATE} from './params';
-import {setupStats} from './stats_panel';
 import {setBackendAndEnvFlags} from './util';
 
-let detector, camera, stats;
-let startInferenceTime, numInferences = 0;
-let inferenceTimeSum = 0, lastPanelUpdate = 0;
+let detector, camera;
 let rafId;
 let renderer = null;
 let useGpuRenderer = false;
@@ -120,26 +117,6 @@ async function checkGuiUpdate() {
   }
 }
 
-function beginEstimatePosesStats() {
-  startInferenceTime = (performance || Date).now();
-}
-
-function endEstimatePosesStats() {
-  const endInferenceTime = (performance || Date).now();
-  inferenceTimeSum += endInferenceTime - startInferenceTime;
-  ++numInferences;
-
-  const panelUpdateMilliseconds = 1000;
-  if (endInferenceTime - lastPanelUpdate >= panelUpdateMilliseconds) {
-    const averageInferenceTime = inferenceTimeSum / numInferences;
-    inferenceTimeSum = 0;
-    numInferences = 0;
-    stats.customFpsPanel.update(
-        1000.0 / averageInferenceTime, 120 /* maxValue */);
-    lastPanelUpdate = endInferenceTime;
-  }
-}
-
 async function renderResult() {
   if (camera.video.readyState < 2) {
     await new Promise((resolve) => {
@@ -155,9 +132,6 @@ async function renderResult() {
   // Detector can be null if initialization failed (for example when loading
   // from a URL that does not exist).
   if (detector != null) {
-    // FPS only counts the time it takes to finish estimatePoses.
-    beginEstimatePosesStats();
-
     if (useGpuRenderer && STATE.model !== 'PoseNet') {
       throw new Error('Only PoseNet supports GPU renderer!');
     }
@@ -181,8 +155,6 @@ async function renderResult() {
       detector = null;
       alert(error);
     }
-
-    endEstimatePosesStats();
   }
   const rendererParams = useGpuRenderer ?
       [camera.video, poses, canvasInfo, STATE.modelConfig.scoreThreshold] :
@@ -209,7 +181,6 @@ async function app() {
   }
   await setupDatGui(urlParams);
 
-  stats = setupStats();
   const isWebGPU = STATE.backend === 'tfjs-webgpu';
   const importVideo = (urlParams.get('importVideo') === 'true') && isWebGPU;
 
