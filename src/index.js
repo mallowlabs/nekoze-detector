@@ -34,11 +34,13 @@ import {RendererCanvas2d} from './renderer_canvas2d';
 import {setupDatGui} from './option_panel';
 import {STATE} from './params';
 import {setBackendAndEnvFlags} from './util';
+import {NekozeDetector} from './nekoze_detector';
 
 let detector, camera;
 let rafId;
 let renderer = null;
 let useGpuRenderer = false;
+let nekozeDetector = new NekozeDetector();
 
 async function createDetector() {
   switch (STATE.model) {
@@ -160,6 +162,8 @@ async function renderResult() {
       [camera.video, poses, canvasInfo, STATE.modelConfig.scoreThreshold] :
       [camera.video, poses, STATE.isModelChanged];
   renderer.draw(rendererParams);
+
+  nekozeDetector.detect(poses);
 }
 
 async function renderPrediction() {
