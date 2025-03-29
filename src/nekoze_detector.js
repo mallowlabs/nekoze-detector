@@ -46,7 +46,7 @@ export class NekozeDetector {
         const yOffset = shoulderKeyPoint.y - earKeyPoint.y;
 
         const neckAngle = Math.atan2(yOffset, xOffset) * 180 / Math.PI;
-        this.angleText.innerText = `${neckAngle.toFixed(2)} degrees ${this.rightMode ? 'right' : 'left'}`;
+        this.angleText.innerText = `${neckAngle.toFixed(2)} degrees ${this.rightMode ? 'right' : 'left'} counter ${this.counter}`;
 
         if (this.rightMode && neckAngle < this.angleThreshold
              || !this.rightMode && neckAngle > 180 - this.angleThreshold) {
