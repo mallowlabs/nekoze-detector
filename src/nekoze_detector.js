@@ -39,13 +39,14 @@ export class NekozeDetector {
             }
         }
 
-        this.earText.innerText = `x ${earKeyPoint.x} y ${earKeyPoint.y}`;
-        this.shoulderText.innerText = `x ${shoulderKeyPoint.x} y ${shoulderKeyPoint.y}`;
+        this.earText.innerText = `x ${earKeyPoint.x.toFixed(2)} y ${earKeyPoint.y.toFixed(2)}`;
+        this.shoulderText.innerText = `x ${shoulderKeyPoint.x.toFixed(2)} y ${shoulderKeyPoint.y.toFixed(2)}`;
+
         const xOffset = earKeyPoint.x - shoulderKeyPoint.x;
         const yOffset = shoulderKeyPoint.y - earKeyPoint.y;
 
         const neckAngle = Math.atan2(yOffset, xOffset) * 180 / Math.PI;
-        this.angleText.innerText = `${neckAngle} degrees ${this.rightMode ? 'right' : 'left'}`;
+        this.angleText.innerText = `${neckAngle.toFixed(2)} degrees ${this.rightMode ? 'right' : 'left'}`;
 
         if (this.rightMode && neckAngle < this.angleThreshold
              || !this.rightMode && neckAngle > 180 - this.angleThreshold) {
