@@ -8,7 +8,7 @@ export class NekozeDetector {
         this.angleThreshold = 50;
         this.counter = 0;
         this.rightMode = false;
-        this.detectionCount = 10;
+        this.detectionCount = 1200; // about 1 min
     }
 
     detect(poses) {
