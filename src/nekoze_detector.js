@@ -8,6 +8,7 @@ export class NekozeDetector {
         this.angleThreshold = 50;
         this.counter = 0;
         this.rightMode = false;
+        this.detectionCount = 10;
     }
 
     detect(poses) {
@@ -54,9 +55,9 @@ export class NekozeDetector {
             this.counter = 0;
         }
 
-        if (this.counter > 10) {
+        if (this.counter > this.detectionCount) {
             this.body.style.backgroundColor = 'red';
-            if (this.counter === 11) {
+            if (this.counter === this.detectionCount + 1) {
                 this.audio.play();
             }
         } else {
