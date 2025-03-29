@@ -22,7 +22,7 @@ export class NekozeDetector {
             this.rightMode = pose.keypoints[3].x > pose.keypoints[5].x;
         }
 
-            let earKeyPoint = null;
+        let earKeyPoint = null;
         let shoulderKeyPoint = null;
 
         if (this.rightMode) {
@@ -40,8 +40,7 @@ export class NekozeDetector {
         }
 
         this.earText.innerText = `x ${earKeyPoint.x} y ${earKeyPoint.y}`;
-        this.shoulderText.innerText
-         = `x ${shoulderKeyPoint.x} y ${shoulderKeyPoint.y}`;
+        this.shoulderText.innerText = `x ${shoulderKeyPoint.x} y ${shoulderKeyPoint.y}`;
         const xOffset = earKeyPoint.x - shoulderKeyPoint.x;
         const yOffset = shoulderKeyPoint.y - earKeyPoint.y;
 
